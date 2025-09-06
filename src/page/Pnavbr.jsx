@@ -192,18 +192,18 @@ const updtpassword=()=>{
 
   <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Name :-</Form.Label>
-              <span>{name}</span>
+              <Form.Label style={{fontSize:"1.2rem",fontWeight:"bold",fontFamily:"monospace",color:"black"}}> Name :-</Form.Label>
+              <span style={{fontSize:"1.2rem",fontWeight:"bold",fontFamily:"monospace",color:"black"}}>{name}</span>
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Mobile Number :-</Form.Label>
-              <span>{mobile}</span>
+              <Form.Label style={{fontSize:"1.2rem",fontWeight:"bold",fontFamily:"monospace",color:"black"}}>Mobile Number :-</Form.Label>
+              <span style={{fontSize:"1.2rem",fontWeight:"bold",fontFamily:"monospace",color:"black"}}>{mobile}</span>
             </Form.Group>
 
  <Form.Group className="mb-3">
-              <Form.Label>Password :-</Form.Label>
-              <span>{password}</span>              
+              <Form.Label style={{fontSize:"1.2rem",fontWeight:"bold",fontFamily:"monospace",color:"black"}}>Password :-</Form.Label>
+              <span style={{fontSize:"1.2rem",fontWeight:"bold",fontFamily:"monospace",color:"black"}}>{password}</span>              
             </Form.Group>
 
         </Form>
@@ -216,7 +216,11 @@ const updtpassword=()=>{
 
       </Modal.Body>
       <Modal.Footer>
+         <small style={{marginTop:"8px",fontSize:"20px",color:"#666",fontFamily:"cursive"}}>
+          © 2025 Ashirvad Kumar Dubey. All Rights Reserved.
+        </small>
         <Button style={{width:"20%",borderRadius: "30px",padding:".5rem" ,fontSize:"1.2rem"}} variant='info' onClick={()=>setModalShowProfile(false)}>Close</Button>
+       
       </Modal.Footer>
     </Modal>
 
