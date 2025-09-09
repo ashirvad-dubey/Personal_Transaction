@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { Alert } from 'bootstrap';
 
 
 
@@ -26,19 +27,20 @@ const [name, setName] = useState("");
       const[date,setDate]=useState('');
       const[notes,setNotes]=useState('');
       const[amount,setAmount]=useState('');
-      const[cramount,setCrAmount]=useState('');
-     const[error,setError]=useState({date:"",notes:"",amount:"",cramount:""});
+      const[debitamount,setDebitAmount]=useState('');
+     const[error,setError]=useState({date:"",notes:"",amount:"",debitamount:""});
       
 
       const handledate=(e)=>{setDate(e.target.value)};
       const handlenotes=(e)=>{setNotes(e.target.value)};
       const handleamount=(e)=>{setAmount(e.target.value)};
-      const handlecramount=(e)=>{setCrAmount(e.target.value)};
+      const handledebitamount=(e)=>{setDebitAmount(e.target.value)};
 
+      
 const DateValidation=()=>{if(!date){return "Enter Date";}return ;};
 const NotesValidation=()=>{if(!notes){return "Enter Notes";}return ;};
-const amountValidation=()=>{if(!amount){return "Enter Credit Amount";}return ;};
-const CramountValidation=()=>{if(!cramount){return "Enter Debit Amount";}return ;};
+const AmountValidation=()=>{if(!amount){return "Enter Credit Amount";}return ;};
+const DebitamountValidation=()=>{if(!debitamount){return "Enter Debit Amount";}return;};
 
 
 
@@ -62,13 +64,14 @@ const CramountValidation=()=>{if(!cramount){return "Enter Debit Amount";}return 
         const add_debit=()=>{
           const dateerror=DateValidation();
           const noteserror=NotesValidation();
-          const amounterror=amountValidation();
-          const cramounterror=CramountValidation();
-          if(!date || !notes || !amount || !cramount){
-            setError({date:dateerror,notes:noteserror,amount:amounterror,cramount:cramounterror})
+          const debitamounterror=DebitamountValidation();
+         if(!date || !notes || !amount)
+            {
+            setError({date:dateerror,notes:noteserror,debitamount:debitamounterror})
             return;
           }
-         const uid = localStorage.getItem("id");
+
+const uid = localStorage.getItem("id");
           const dt={
             uid:Number(uid),
             date:date,
@@ -76,7 +79,7 @@ const CramountValidation=()=>{if(!cramount){return "Enter Debit Amount";}return 
             credit:0,
             debit:amount,
           }
-    axios.post("http://127.0.0.1:3000/insert_debit",dt)
+    axios.post("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/insert_debit",dt)
     .then(res=>{
       if(res.data.status===200){
        alert("Debit Successfully....!✅");
@@ -86,7 +89,50 @@ const CramountValidation=()=>{if(!cramount){return "Enter Debit Amount";}return 
       setNotes("");
       setAmount("");
     }
-    else{ alert("Credit Failed....!❌");}});}
+    else{ alert("Debit Failed....!❌");}});
+
+
+         }
+
+
+
+ const add_credit=()=>{
+  const dateerror=DateValidation();
+  const noteserror=NotesValidation();
+  const amounterror=AmountValidation();
+  if(!date || !notes || !amount){
+    setError({date:dateerror,notes:noteserror,amount:amounterror})
+    return;
+  }
+  
+const uid = localStorage.getItem("id");
+  const dt={
+    uid: Number(uid),   
+   date:date,
+    notes:notes,
+    credit: Number(amount),
+    debit:0 
+  }
+  axios.post("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/insert_credit",dt)
+  .then(res=>{
+    if(res.data.status===200){
+      alert("Credit Successfully....!✅");
+      gethistory();
+      setModalShowCredit(false);
+      setDate("");
+      setNotes("");
+      setAmount("");
+    }
+    else{ alert("Credit Failed....!❌");}})
+   
+
+
+
+
+  }
+
+
+
 
 const totalCredit = data.reduce(
     (acc, item) => acc + Number(item.credit), 0
@@ -107,41 +153,17 @@ const totalcredit_debit = data.reduce(
 
 
 
-const add_credit=()=>{
-   const dateerror=DateValidation();
-          const noteserror=NotesValidation();
-          const amounterror=amountValidation();
-          const cramounterror=CramountValidation();
-          if(!date || !notes || !amount || !cramount){
-            setError({date:dateerror,notes:noteserror,amount:amounterror,cramount:cramounterror})
-            return;
-          }
- const uid = localStorage.getItem("id");
-  const dt={
-    uid: Number(uid),   
-   date:date,
-    notes:notes,
-    credit: Number(amount),
-    debit:0 
-  }
-  axios.post("http://127.0.0.1:3000/insert_credit",dt)
-  .then(res=>{
-    if(res.data.status===200){
-      alert("Credit Successfully....!✅");
-      gethistory();
-      setModalShowCredit(false);
-      setDate("");
-      setNotes("");
-      setAmount("");
-    }
-    else{ alert("Credit Failed....!❌");}})}
 
+
+ 
   const gethistory=()=>{
+    
    const uid = localStorage.getItem("id");
-    axios.get("http://127.0.0.1:3000/history",{
+    axios.get("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/history",{
       params: { uid: Number(uid) }})
     .then(res=>{ setData(res.data.data);});}
 
+  
 
   const mainblance = data.reduce(
     (acc, item) => acc + Number(item.credit)-Number(item.debit),0
@@ -152,22 +174,22 @@ const add_credit=()=>{
 
 
   const Tblupdate=()=>{
-     const dateerror=DateValidation();
           const noteserror=NotesValidation();
-          const amounterror=amountValidation();
-          const cramounterror=CramountValidation();
-          if(!date || !notes || !amount || !cramount){
-            setError({date:dateerror,notes:noteserror,amount:amounterror,cramount:cramounterror})
+          const amounterror=AmountValidation();
+          const debitamounterror=DebitamountValidation();
+          if( !notes || !amount || !debitamount){
+            setError({notes:noteserror,amount:amounterror,debitamount:debitamounterror})
             return;
           }
-const dt={
+
+          const dt={
   sid:sid,
   notes:notes,
   credit:amount,
-  debit:cramount
+  debit:debitamount
 }
 console.log(dt);
-axios.put('http://127.0.0.1:3000/tbl_update',dt)
+axios.put('https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/tbl_update',dt)
 .then(res=>{
   if(res.data.status===200){
     alert("Table Update Successfully....!✅");
@@ -175,9 +197,11 @@ setModalShowUpdt(false);
 gethistory();
   }else{ alert("Table Update Failed....!❌");}});}
 
+
+
        const tbledelete=(sid)=>{
           const dt={sid:sid}
-          axios.delete('http://127.0.0.1:3000/tbl_delete',{data:dt})
+          axios.delete('https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/tbl_delete',{data:dt})
             .then(res=>{
               if(res.data.status===200){
             alert("Table Delete Successfully....!✅'") ; 
@@ -202,7 +226,8 @@ gethistory();
       <Card.Body>
         <Card.Title>Your Opening Amount</Card.Title>
         <Card.Text>
-         <center><span>₹{currnt}</span></center>
+          
+         <p><center><span>₹{currnt}</span></center></p>
         </Card.Text>
       </Card.Body>
     </Card>
@@ -213,7 +238,8 @@ gethistory();
       <Card.Body>
         <Card.Title>Total Credit (incl.Opening Bal)</Card.Title>
         <Card.Text>
-       <center><span>₹{totalCredit}</span></center>
+          <p>
+       <center><span>₹{totalCredit}</span></center></p>
         </Card.Text>
       </Card.Body>
     </Card>
@@ -226,7 +252,7 @@ gethistory();
       <Card.Body>
         <Card.Title>Total Debit</Card.Title>
         <Card.Text>
-              <center><span>₹{totalDebit}</span></center>
+          <p><center><span>₹{totalDebit}</span></center></p>
         </Card.Text>
       </Card.Body>
     </Card>
@@ -239,7 +265,7 @@ gethistory();
       <Card.Body>
         <Card.Title>Your Current Blanace</Card.Title>
         <Card.Text>
-        <center><span>₹{mainblance}</span></center>
+        <p><center><span>₹{mainblance}</span></center></p>
         </Card.Text>
       </Card.Body>
     </Card>
@@ -252,7 +278,7 @@ gethistory();
       <Card.Body>
         <Card.Title>Total Credit + Debit (incl.Opening Bal)</Card.Title>
         <Card.Text>
-         <center><span>₹{totalcredit_debit}</span></center>
+         <p><center><span>₹{totalcredit_debit}</span></center></p>
         </Card.Text>
       </Card.Body>
     </Card>
@@ -262,7 +288,7 @@ gethistory();
       <Card.Body>
         <Card.Title>Total Credit - Debit (incl.Opening Bal)</Card.Title>
         <Card.Text>
-            <center><span>₹{totalDebit_credit}</span></center>
+          <p>  <center><span>₹{totalDebit_credit}</span></center></p>
         </Card.Text>
       </Card.Body>
     </Card></Col></Row>    </Container>
@@ -345,7 +371,7 @@ gethistory();
               <Form.Label>Amount</Form.Label>
               <Form.Control onChange={handleamount} type="number" placeholder="Enter Amount " />
             </Form.Group>
-               {error.amount && <p style={{ color: "red" }}>{error.amount}</p>}
+               {error.debitamount && <p style={{ color: "red" }}>{error.debitamount}</p>}
 
           
         </Form>
@@ -420,21 +446,21 @@ gethistory();
         <Form>
             <Form.Group className="mb-3">
               <Form.Label>Enter New Notes :-</Form.Label>
-              <Form.Control onChange={handlenotes} type="text" placeholder="Enter Current Notes" />
+              <Form.Control onChange={handlenotes} value={notes} type="text" placeholder="Enter Current Notes" />
             </Form.Group>
                {error.date && <p style={{ color: "red" }}>{error.date}</p>}
 
  <Form.Group className="mb-3">
               <Form.Label>Enter New Credit :-</Form.Label>
-              <Form.Control onChange={handleamount} type="text" placeholder="Enter New Credit" />
+              <Form.Control onChange={handleamount}  type="text" placeholder="Enter New Credit" />
             </Form.Group>
                {error.amount && <p style={{ color: "red" }}>{error.amount}</p>}
 
  <Form.Group className="mb-3">
               <Form.Label>Enter new Debit</Form.Label>
-              <Form.Control onChange={handlecramount} type="number" placeholder="Enter New Debit " />
+              <Form.Control onChange={handledebitamount}  type="number" placeholder="Enter New Debit " />
             </Form.Group>
-               {error.cramount && <p style={{ color: "red" }}>{error.cramount}</p>}
+               {error.debitamount && <p style={{ color: "red" }}>{error.debitamount}</p>}
 
           
         </Form>

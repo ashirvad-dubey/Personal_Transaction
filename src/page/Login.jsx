@@ -39,6 +39,43 @@ const handlepassword = (e) => {
     if(!password)return "Enter Password";
   }
 
+
+  const login = (e) => {
+  e.preventDefault();
+
+  const mobileerror = Mobilevalidation();
+  const passworderror = PasswordValidation();
+
+  if (!mobile || !password) {
+    setError({ mobile: mobileerror, password: passworderror });
+    return;
+  }
+
+  const dt = { mobile, password };
+
+  axios.post("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/user_login",dt)
+    .then((res) => {
+      alert(res.data.msg);
+
+      if (res.data.status === 200) {
+        localStorage.setItem("isLogin", "true");
+        localStorage.setItem("name", res.data.data.name);
+        localStorage.setItem("openamt", res.data.data.openamt);
+        localStorage.setItem("id", res.data.data.id);
+        localStorage.setItem("cpassword", res.data.data.password);
+        localStorage.setItem("mobile", res.data.data.mobile);
+
+        setIsLoggedIn(true);
+        navigate("/home");
+        window.location.reload();
+      }
+    })
+    .catch(() => {
+      alert("Worng Mobile number / Password Login Failed....!❌");
+    });
+};
+
+  /*
   const login=(e)=>{
     e.preventDefault();
     const mobileerror=Mobilevalidation();
@@ -53,7 +90,7 @@ const handlepassword = (e) => {
         mobile:mobile,
         password:password
       }
-      axios.post("http://127.0.0.1:3000/user_login",dt)
+      axios.post("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/user_login",dt)
         .then(res=>{
           if(res.data.status===200){
           
@@ -72,7 +109,7 @@ const handlepassword = (e) => {
               window.location.reload();
 
           }else{
-               alert("Worng Mobile number / Password Login Failed....!❌"); }});}
+              alert("Worng Mobile number / Password Login Failed....!❌"); }});}*/
   return (
 
 <>

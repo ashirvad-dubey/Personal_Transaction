@@ -60,7 +60,7 @@ const updtpassword=()=>{
      uid: Number(uid),   
     password:chngpassword
   }
-  axios.patch("http://127.0.0.1:3000/updt_password",dt)
+  axios.patch("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/updt_password",dt)
     .then(res=>{
       if(res.data.status===200){
         alert("Password Updated successfully...✅");

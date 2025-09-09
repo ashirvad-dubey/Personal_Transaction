@@ -43,7 +43,7 @@ export default function Adduser(){
             password:password,
             openamt:openamt
           }
-          axios.post("http://127.0.0.1:3000/add_user",dt)
+          axios.post("https://ftrgqllvvkalmucafpwu.functions.supabase.co/personaltranscation/add_user",dt)
           .then(res=>{
             if(res.data.status=="200"){
               alert("Register Successfully....!✅");
